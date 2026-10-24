@@ -15,6 +15,7 @@ const FILES = [
   { href: "/data/samples.json", name: "samples.json", what: "Every published sample result" },
   { href: "/data/substances.json", name: "substances.json", what: "The substances referenced by results" },
   { href: "/data/alerts.json", name: "alerts.json", what: "Every alert we've posted" },
+  { href: "/data/areas.json", name: "areas.json", what: "The broad areas results are grouped by" },
 ];
 
 export default function DataPage() {

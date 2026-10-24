@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AlertCard } from "@/components/results";
 import { alerts, substance } from "@/lib/data";
+import { scopedHref } from "@/lib/scope";
 import { pageMetadata } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -24,20 +25,24 @@ export default async function AlertPage(props: PageProps<"/alerts/[id]">) {
 
   return (
     <div className="space-y-8 pt-6">
-      <Link href="/alerts" className="text-sm text-ink-3 hover:text-ink">
+      <Link href={scopedHref("/alerts", alert.area)} className="text-sm text-ink-3 hover:text-ink">
         ← All alerts
       </Link>
       <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
         <div className="max-w-2xl space-y-6">
           <AlertCard alert={alert} heading="h1">
-            <Link href={`/substances/${alert.substance}`} className="mt-4 inline-block text-sm text-ink hover:text-accent">
-              See all {substance(alert.substance).name} results →
+            <Link
+              href={scopedHref(`/substances/${alert.substance}`, alert.area)}
+              className="mt-4 inline-block text-sm text-ink hover:text-accent"
+            >
+              See {substance(alert.substance).name} results →
             </Link>
           </AlertCard>
           <section className="rounded-2xl border border-line bg-panel p-6">
             <h2 className="text-lg font-medium">Share it</h2>
             <p className="mt-1 text-sm text-ink-3">
-              A story-sized card (1080x1920) for Instagram and TikTok. It shows the week only, never a place or a person.
+              A story-sized card (1080x1920) for Instagram and TikTok. It shows the week and broad area only, never an
+              exact place or a person.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <a

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { alerts, latestWeek, pageSubstances } from "@/lib/data";
+import { alerts, areas, latestWeek, pageSubstances } from "@/lib/data";
 import { SITE_URL } from "@/lib/site";
 
 // Result pages are left out on purpose: they're reachable by sample ID only and kept out of search.
@@ -17,6 +17,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
+    ...areas.flatMap((a) => [
+      { url: url(`/in/${a.slug}`), lastModified, changeFrequency: "weekly" as const, priority: 0.8 },
+      { url: url(`/in/${a.slug}/alerts`), lastModified, changeFrequency: "weekly" as const, priority: 0.6 },
+      { url: url(`/in/${a.slug}/substances`), lastModified, changeFrequency: "weekly" as const, priority: 0.6 },
+      ...pageSubstances.map((s) => ({
+        url: url(`/in/${a.slug}/substances/${s.slug}`),
+        lastModified,
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+      })),
+    ]),
     { url: url("/check"), changeFrequency: "yearly", priority: 0.6 },
     { url: url("/methods"), changeFrequency: "monthly", priority: 0.6 },
     { url: url("/data"), lastModified, changeFrequency: "weekly", priority: 0.5 },

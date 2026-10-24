@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { reagent, substance, verdict, type Verdict } from "@/lib/data";
+import { area, reagent, substance, verdict, type Verdict } from "@/lib/data";
 import { formatWeek } from "@/lib/format";
 import type { Alert, ReagentResult, Sample } from "@/lib/types";
 
@@ -73,11 +73,16 @@ export function SampleRow({ sample }: { sample: Sample }) {
         </div>
         <p className="text-sm text-ink-2">Found: {foundSummary(sample)}</p>
         <p className="mt-1 text-xs text-ink-3">
-          {formatWeek(sample.week)} · {sample.area} · {sample.id}
+          {formatWeek(sample.week)} · {area(sample.area).name} · {sample.id}
         </p>
       </Link>
     </li>
   );
+}
+
+/** Where an alert applies: one area, or everywhere we test. */
+export function alertPlace(alert: Alert): string {
+  return alert.area ? area(alert.area).name : "All areas";
 }
 
 /** One alert in full. `heading` is the level its title sits at on the page. */
@@ -91,7 +96,7 @@ export function AlertCard({ alert, heading = "h2", children }: { alert: Alert; h
     >
       <p className={`text-xs font-semibold uppercase tracking-wider ${critical ? "text-critical" : "text-warning"}`}>
         <span aria-hidden="true">▲ </span>
-        {critical ? "Alert" : "Heads up"} · {formatWeek(alert.week)}
+        {critical ? "Alert" : "Heads up"} · {alertPlace(alert)} · {formatWeek(alert.week)}
       </p>
       <Title className={`mt-2 font-display ${heading === "h1" ? "text-4xl sm:text-5xl" : "text-3xl"}`}>{alert.title}</Title>
       <p className="mt-3 text-ink-2">{alert.body}</p>
@@ -114,7 +119,7 @@ export function AlertBanner({ alert }: { alert: Alert }) {
       </span>
       <span className="flex-1">
         <span className={`block text-xs font-semibold uppercase tracking-wider ${critical ? "text-critical" : "text-warning"}`}>
-          {critical ? "Alert" : "Heads up"} · {formatWeek(alert.week)}
+          {critical ? "Alert" : "Heads up"} · {alertPlace(alert)} · {formatWeek(alert.week)}
         </span>
         <span className="font-medium text-ink">{alert.title}</span>
       </span>

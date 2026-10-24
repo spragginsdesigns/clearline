@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Disclaimer, ReagentSwatch, VerdictBadge } from "@/components/results";
-import { sampleById, samples, substance, verdict } from "@/lib/data";
+import { area, sampleById, samples, substance, verdict } from "@/lib/data";
 import { formatWeek } from "@/lib/format";
 
 export function generateStaticParams() {
@@ -109,7 +109,7 @@ export default async function ResultPage(props: PageProps<"/results/[id]">) {
             {sample.fentanylStrip === "positive" ? "▲ Positive" : sample.fentanylStrip === "negative" ? "✓ Negative" : "Not run"}
           </p>
           <p className="mt-4 text-sm text-ink-3">
-            Tested with {sample.methods.map((m) => METHOD_LABELS[m]).join(", ")}. {formatWeek(sample.week)}, {sample.area}.
+            Tested with {sample.methods.map((m) => METHOD_LABELS[m]).join(", ")}. {formatWeek(sample.week)}, {area(sample.area).name}.
           </p>
         </div>
       </section>

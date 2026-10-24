@@ -22,6 +22,7 @@ treats the people who use it as adults making their own decisions.
 | `/check` → `/results/[id]` | A person enters the ID from their sample and sees their own result |
 | `/alerts` | Every alert, newest first |
 | `/alerts/[id]` | One alert, with a 1080x1920 story card (`/alerts/[id]/story.png`) for Instagram and TikTok |
+| `/in/[area]`, `/in/[area]/substances[/slug]`, `/in/[area]/alerts` | The same pages filtered to one area. The header picker ("Use my location" or a searchable list) takes people there and remembers their choice on their device |
 | `/methods` | What each test can and can't detect, and how people's privacy is protected |
 | `/data` | The open dataset as JSON downloads (CC BY 4.0) |
 
@@ -54,19 +55,21 @@ There is no database and no server-side secrets. The whole site is generated at 
 - **Every number is computed** in `src/lib/data.ts` from the raw samples. Pages never hard-code a figure.
 
 ```
-data/            the open dataset: samples, substances, reagents, alerts
+data/            the open dataset: samples, substances, reagents, alerts, areas
 docs/            data dictionary, the original design mockups, and the brand (docs/brand/)
 scripts/         the demo data generator, the icon builder and the Sunburst image generator
 src/app/         pages, icons, share image, story cards, sitemap and the /data/*.json download routes
 src/assets/      fonts and images used to draw the share image and story cards
-src/components/  charts, substance and result cards, empty states, header and footer
+src/views/      page bodies shared by the all-areas routes and their /in/[area] versions
+src/components/  charts, substance and result cards, empty states, header, location picker and footer
 src/lib/         types, data loading and aggregation, formatting, brand geometry, site metadata
 ```
 
 ## Privacy
 
 Published results never include names, contact details, exact dates, venues or sellers. Each sample has a week and a
-broad area, nothing finer. Sample IDs are the only link between a person and their result, and result pages are kept
+broad area, nothing finer. "Use my location" runs entirely in the browser: the position is matched to the nearest
+area on the device and never sent anywhere; only the chosen area is remembered, in local storage. Sample IDs are the only link between a person and their result, and result pages are kept
 out of search engines. See [docs/DATA.md](docs/DATA.md#privacy-rules) for the rules any real data must follow.
 
 ## Contributing

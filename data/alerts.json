@@ -1,26 +1,38 @@
 [
   {
-    "id": "demo-2026-10-19-cocaine-fentanyl",
+    "id": "demo-2026-10-19-nyc-cocaine-fentanyl",
     "week": "2026-10-19",
     "severity": "critical",
     "title": "Fentanyl found in samples sold as cocaine",
     "body": "Fentanyl turned up in samples sold as cocaine this week. People who don't use opioids have no tolerance, so even a trace can cause an overdose. Test before you use, don't use alone, and carry naloxone.",
-    "substance": "cocaine"
+    "substance": "cocaine",
+    "area": "new-york-ny"
   },
   {
-    "id": "demo-2026-10-12-mdma-cathinone",
+    "id": "demo-2026-10-12-portland-mdma-cathinone",
     "week": "2026-10-12",
     "severity": "warning",
     "title": "Cathinones sold as MDMA",
     "body": "Some samples sold as MDMA were mostly N-ethylpentylone, a synthetic cathinone. It lasts much longer than MDMA, so redosing is risky. A Marquis test that gives no reaction is a red flag.",
-    "substance": "mdma"
+    "substance": "mdma",
+    "area": "portland-or"
   },
   {
-    "id": "demo-2026-10-05-heroin-xylazine",
+    "id": "demo-2026-10-05-philadelphia-heroin-xylazine",
     "week": "2026-10-05",
     "severity": "critical",
     "title": "Xylazine in samples sold as heroin",
     "body": "Xylazine keeps showing up alongside fentanyl. Naloxone still helps with the opioid part of an overdose, so always give it, then call for help. Xylazine can also cause wounds that need care.",
-    "substance": "heroin"
+    "substance": "heroin",
+    "area": "philadelphia-pa"
+  },
+  {
+    "id": "demo-2026-09-28-heroin-fentanyl",
+    "week": "2026-09-28",
+    "severity": "critical",
+    "title": "Most \"heroin\" is now mostly fentanyl",
+    "body": "Across every area we test, more than half of samples sold as heroin were mostly fentanyl. Doses are unpredictable from one bag to the next. Start with a tiny amount, don't use alone, and keep naloxone close.",
+    "substance": "heroin",
+    "area": null
   }
 ]

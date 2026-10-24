@@ -1,6 +1,6 @@
 # The Clearline dataset
 
-Everything the site shows is computed at build time from four JSON files in `data/`. Replacing them with real lab
+Everything the site shows is computed at build time from five JSON files in `data/`. Replacing them with real lab
 results (and setting `"demo": false`) turns the demo site into the real one; no code changes are needed.
 
 ## `samples.json`
@@ -24,7 +24,7 @@ Each **Sample**:
 |-------|------|---------|
 | `id` | string | The ID printed on the person's receipt or bag, e.g. `CL-2026-00123`. The lookup accepts `CL-` followed by 4 to 24 letters, digits or dashes. **Real IDs should be random**, not sequential, so one result can't be found by guessing its neighbours. |
 | `week` | ISO date | The Monday of the week the sample was tested. Never the exact day. |
-| `area` | string | A broad area such as a neighbourhood or region. Never a venue or address. |
+| `area` | area slug | The broad area the sample came from, e.g. `portland-or`. Must exist in `areas.json`. Never a venue or address. |
 | `soldAs` | substance slug | What the person was told it was. Must exist in `substances.json`. |
 | `form` | `powder` · `crystal` · `pill` · `tar` · `other` | Physical form. |
 | `found` | Component[] | Everything identified, most abundant first. Empty if nothing was identified. |
@@ -52,8 +52,26 @@ A **ReagentResult** is `{ "reagent": "<slug from reagents.json>", "result": "Pur
 
 ## `alerts.json`
 
-`{ "id", "week", "severity": "warning" | "critical", "title", "body", "substance" }`. Newest first on the site. The most
-recent alert shows on the homepage, and each substance page shows its own latest alert.
+`{ "id", "week", "severity": "warning" | "critical", "title", "body", "substance", "area" }`. Newest first on the site.
+`area` is an area slug when the alert is about one area, or `null` when it applies everywhere the lab tests.
+
+An area's pages show its own alerts plus the `null` ones. The all-areas pages list every alert on `/alerts`, but only
+banner the `null` ones on the homepage and substance pages, so nobody gets a headline about a city far away.
+
+## `areas.json`
+
+The broad areas people can pick on the site. Each one gets its own home, substances and alerts pages under
+`/in/<slug>/`.
+
+| Field | Meaning |
+|-------|---------|
+| `slug` | ID used in `samples.json`, `alerts.json` and URLs, e.g. `portland-or`. |
+| `name` | Display name, e.g. `Portland`. |
+| `region` | State or province, used to group the picker list. |
+| `lat`, `lng` | A rough center point, two decimals at most. Only used in the browser to find the area nearest the person; their own position never leaves their device. |
+
+"Use my location" picks the nearest area within 120 miles (`NEARBY_MILES` in `src/lib/scope.ts`). Further than that,
+the site says plainly that the lab doesn't test near them yet and offers the closest area or all areas.
 
 ## `reagents.json`
 
@@ -77,7 +95,8 @@ All in `src/lib/data.ts`:
 Real exports must follow these, because everything here is public:
 
 1. No names, contact details, payment details or anything else that identifies the person who brought the sample.
-2. No seller, venue or address. `area` is a broad region only.
+2. No seller, venue or address. `area` is a metro area or region only, never a neighbourhood that could single out a
+   site.
 3. `week`, never an exact date or time.
 4. Random, unguessable sample IDs.
 5. If an area has so few samples in a week that a result could point to one person, merge it into a larger area.

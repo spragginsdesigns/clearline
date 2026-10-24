@@ -3,10 +3,11 @@
 // lab's real export updates the whole site.
 
 import alertsJson from "../../data/alerts.json";
+import areasJson from "../../data/areas.json";
 import reagentsJson from "../../data/reagents.json";
 import samplesJson from "../../data/samples.json";
 import substancesJson from "../../data/substances.json";
-import type { Alert, Dataset, Reagent, ReagentResult, Sample, Substance } from "./types";
+import type { Alert, Area, Dataset, Reagent, ReagentResult, Sample, Substance } from "./types";
 
 const dataset = samplesJson as Dataset;
 export const substances = substancesJson as Substance[];
@@ -14,6 +15,34 @@ export const reagents = reagentsJson as Reagent[];
 export const alerts = (alertsJson as Alert[]).toSorted((a, b) => b.week.localeCompare(a.week));
 export const samples: Sample[] = dataset.samples;
 export const isDemo = dataset.demo;
+
+// --- areas ---------------------------------------------------------------
+
+/** Areas in the order the picker lists them: by region, then name. */
+export const areas = (areasJson as Area[]).toSorted(
+  (a, b) => a.region.localeCompare(b.region) || a.name.localeCompare(b.name),
+);
+const areaBySlug = new Map(areas.map((a) => [a.slug, a]));
+
+export function area(slug: string): Area {
+  const found = areaBySlug.get(slug);
+  if (!found) throw new Error(`Unknown area "${slug}" in data/. Add it to data/areas.json.`);
+  return found;
+}
+
+export function findArea(slug: string): Area | undefined {
+  return areaBySlug.get(slug);
+}
+
+/** Every sample from one area, or all of them when `scope` is null. */
+export function samplesIn(scope: Area | null): Sample[] {
+  return scope ? samples.filter((s) => s.area === scope.slug) : samples;
+}
+
+/** Alerts that apply to an area: its own plus the ones for everywhere. All of them when `scope` is null. */
+export function alertsFor(scope: Area | null): Alert[] {
+  return scope ? alerts.filter((a) => a.area === null || a.area === scope.slug) : alerts;
+}
 
 /** The newest week in the data. Pages measure "last 90 days" from here, not from today. */
 export const latestWeek = samples.reduce((max, s) => (s.week > max ? s.week : max), "");
@@ -146,8 +175,8 @@ export interface MonthMix {
 }
 
 /** What samples sold as `slug` mostly turned out to be, month by month. */
-export function soldAsMix(slug: string, months = 6): { keys: string[]; rows: MonthMix[] } {
-  const sold = samples.filter((s) => s.soldAs === slug);
+export function soldAsMix(slug: string, list: Sample[] = samples, months = 6): { keys: string[]; rows: MonthMix[] } {
+  const sold = list.filter((s) => s.soldAs === slug);
   const monthKeys = [...new Set(sold.map((s) => s.week.slice(0, 7)))].toSorted().slice(-months);
   const keyCounts = new Map<string, number>();
   const rows = monthKeys.map((month) => {
@@ -187,7 +216,7 @@ export function typicalReagents(slug: string, list: Sample[]): (ReagentResult & 
   });
 }
 
-export function recentSamples(count: number): Sample[] {
-  return samples.toSorted((a, b) => b.week.localeCompare(a.week) || b.id.localeCompare(a.id)).slice(0, count);
+export function recentSamples(count: number, list: Sample[] = samples): Sample[] {
+  return list.toSorted((a, b) => b.week.localeCompare(a.week) || b.id.localeCompare(a.id)).slice(0, count);
 }
 

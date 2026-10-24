@@ -1,13 +1,13 @@
 import { ImageResponse } from "next/og";
 import type { ReactNode } from "react";
 import { BRAND } from "@/lib/brand";
-import { alerts, isDemo } from "@/lib/data";
+import { alerts, area, isDemo } from "@/lib/data";
 import { formatWeek } from "@/lib/format";
 import { assetImage, OgLockup, ogFonts } from "@/lib/og";
 import { SITE_URL } from "@/lib/site";
 
 // A 9:16 story card per alert, sized for Instagram and TikTok stories (1080x1920), prerendered at
-// build time. Like the site, it shows the week only and never a place finer than the alert itself.
+// build time. Like the site, it shows the week and the alert's broad area, never anything finer.
 
 const WIDTH = 1080;
 const HEIGHT = 1920;
@@ -55,7 +55,10 @@ export async function GET(_request: Request, ctx: RouteContext<"/alerts/[id]/sto
 
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 120, fontSize: 32, fontWeight: 500, color: tone, letterSpacing: 4 }}>
             <Triangle color={tone} />
-            {(critical ? "Alert" : "Heads up").toUpperCase()} · {formatWeek(alert.week).toUpperCase()}
+            {[critical ? "Alert" : "Heads up", alert.area ? area(alert.area).name : null, formatWeek(alert.week)]
+              .filter(Boolean)
+              .join(" · ")
+              .toUpperCase()}
           </div>
           <div style={{ display: "flex", marginTop: 28, fontFamily: "Instrument Serif", fontSize: 112, lineHeight: 1.02 }}>
             {alert.title}

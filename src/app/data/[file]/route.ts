@@ -1,4 +1,5 @@
 import alertsJson from "../../../../data/alerts.json";
+import areasJson from "../../../../data/areas.json";
 import samplesJson from "../../../../data/samples.json";
 import substancesJson from "../../../../data/substances.json";
 
@@ -7,6 +8,7 @@ const FILES: Record<string, unknown> = {
   "samples.json": samplesJson,
   "substances.json": substancesJson,
   "alerts.json": alertsJson,
+  "areas.json": areasJson,
 };
 
 export function generateStaticParams() {

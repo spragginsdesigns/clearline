@@ -29,7 +29,9 @@ export function SubstanceCard({
   index,
   total,
   windowDays,
+  href,
 }: {
+  href: string;
   substance: Substance;
   stats: SubstanceStats;
   reagents: (ReagentResult & { share: number })[];
@@ -39,7 +41,7 @@ export function SubstanceCard({
 }) {
   return (
     <Link
-      href={`/substances/${s.slug}`}
+      href={href}
       className={`group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-panel p-5 transition hover:border-line-strong hover:bg-panel-raised ${spanClasses(index, total)}`}
     >
       <span

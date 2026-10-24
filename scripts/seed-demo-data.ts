@@ -8,12 +8,27 @@
 
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
+import areas from "../data/areas.json";
 import type { Alert, Component, ReagentResult, Sample } from "../src/lib/types";
 
 const OUT = join(process.cwd(), "data");
 const LAST_WEEK = new Date("2026-10-19T00:00:00Z");
 const WEEKS = 26;
-const AREAS = ["Northside", "Downtown", "Eastside", "Riverside", "West End"];
+
+/**
+ * Made-up local differences, so picking an area visibly changes the site: how busy each area is,
+ * and multipliers on the national odds of fentanyl, xylazine and look-alike swaps.
+ */
+const LOCAL: Record<string, { weekly: number; fentanyl: number; xylazine: number; swaps: number }> = {
+  "seattle-wa": { weekly: 10, fentanyl: 1.2, xylazine: 0.4, swaps: 1.6 },
+  "portland-or": { weekly: 9, fentanyl: 1.1, xylazine: 0.4, swaps: 2.2 },
+  "bay-area-ca": { weekly: 12, fentanyl: 1, xylazine: 0.5, swaps: 1.2 },
+  "los-angeles-ca": { weekly: 13, fentanyl: 0.9, xylazine: 0.3, swaps: 1 },
+  "denver-co": { weekly: 7, fentanyl: 0.8, xylazine: 0.6, swaps: 0.8 },
+  "chicago-il": { weekly: 11, fentanyl: 1.3, xylazine: 1.4, swaps: 0.7 },
+  "philadelphia-pa": { weekly: 12, fentanyl: 1.4, xylazine: 3.2, swaps: 0.6 },
+  "new-york-ny": { weekly: 14, fentanyl: 1.8, xylazine: 1.8, swaps: 0.8 },
+};
 
 // Fixed seed so a rebuild never reshuffles the demo.
 function mulberry32(seed: number) {
@@ -124,19 +139,26 @@ function weightedSoldAs(): string {
   return "cocaine";
 }
 
-function primary(profile: Profile, soldAs: string): string | null {
+function primary(profile: Profile, soldAs: string, swapScale: number): string | null {
   let roll = rand();
   for (const [slug, odds] of profile.swaps) {
-    roll -= odds;
+    // Heroin-to-fentanyl is the national supply, not a local look-alike, so it isn't scaled.
+    roll -= slug === "fentanyl" ? odds : odds * swapScale;
     if (roll <= 0) return slug;
   }
   return soldAs;
 }
 
-function makeSample(index: number, week: Date): Sample {
+function makeSample(index: number, week: Date, area: string): Sample {
+  const local = LOCAL[area];
   const soldAs = weightedSoldAs();
-  const profile = PROFILES[soldAs];
-  const main = primary(profile, soldAs);
+  const base = PROFILES[soldAs];
+  const profile: Profile = {
+    ...base,
+    fentanyl: Math.min(0.95, base.fentanyl * local.fentanyl),
+    xylazine: base.xylazine && Math.min(0.9, base.xylazine * local.xylazine),
+  };
+  const main = primary(profile, soldAs, local.swaps);
   const found: Component[] = [];
   let left = 100;
 
@@ -175,7 +197,7 @@ function makeSample(index: number, week: Date): Sample {
   return {
     id: `CL-${week.getUTCFullYear()}-${String(index).padStart(5, "0")}`,
     week: week.toISOString().slice(0, 10),
-    area: pick(AREAS),
+    area,
     soldAs,
     form: pick(profile.form),
     found,
@@ -190,34 +212,49 @@ let counter = 1;
 for (let w = WEEKS - 1; w >= 0; w--) {
   const week = new Date(LAST_WEEK);
   week.setUTCDate(week.getUTCDate() - w * 7);
-  const count = normal(30, 6, 15, 45);
-  for (let i = 0; i < count; i++) samples.push(makeSample(counter++, week));
+  for (const area of areas) {
+    const weekly = LOCAL[area.slug].weekly;
+    const count = normal(weekly, weekly / 4, 2, weekly * 2);
+    for (let i = 0; i < count; i++) samples.push(makeSample(counter++, week, area.slug));
+  }
 }
 
 const alerts: Alert[] = [
   {
-    id: "demo-2026-10-19-cocaine-fentanyl",
+    id: "demo-2026-10-19-nyc-cocaine-fentanyl",
     week: "2026-10-19",
     severity: "critical",
     title: "Fentanyl found in samples sold as cocaine",
     body: "Fentanyl turned up in samples sold as cocaine this week. People who don't use opioids have no tolerance, so even a trace can cause an overdose. Test before you use, don't use alone, and carry naloxone.",
     substance: "cocaine",
+    area: "new-york-ny",
   },
   {
-    id: "demo-2026-10-12-mdma-cathinone",
+    id: "demo-2026-10-12-portland-mdma-cathinone",
     week: "2026-10-12",
     severity: "warning",
     title: "Cathinones sold as MDMA",
     body: "Some samples sold as MDMA were mostly N-ethylpentylone, a synthetic cathinone. It lasts much longer than MDMA, so redosing is risky. A Marquis test that gives no reaction is a red flag.",
     substance: "mdma",
+    area: "portland-or",
   },
   {
-    id: "demo-2026-10-05-heroin-xylazine",
+    id: "demo-2026-10-05-philadelphia-heroin-xylazine",
     week: "2026-10-05",
     severity: "critical",
     title: "Xylazine in samples sold as heroin",
     body: "Xylazine keeps showing up alongside fentanyl. Naloxone still helps with the opioid part of an overdose, so always give it, then call for help. Xylazine can also cause wounds that need care.",
     substance: "heroin",
+    area: "philadelphia-pa",
+  },
+  {
+    id: "demo-2026-09-28-heroin-fentanyl",
+    week: "2026-09-28",
+    severity: "critical",
+    title: "Most \"heroin\" is now mostly fentanyl",
+    body: "Across every area we test, more than half of samples sold as heroin were mostly fentanyl. Doses are unpredictable from one bag to the next. Start with a tiny amount, don't use alone, and keep naloxone close.",
+    substance: "heroin",
+    area: null,
   },
 ];
 

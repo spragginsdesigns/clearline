@@ -37,7 +37,7 @@ export interface Sample {
   id: string;
   /** Monday of the week the sample was tested (ISO date). Never the exact day. */
   week: string;
-  /** Area only, never an address or venue. */
+  /** Slug of a broad area in areas.json, never an address or venue. */
   area: string;
   soldAs: string;
   form: "powder" | "crystal" | "pill" | "tar" | "other";
@@ -56,6 +56,20 @@ export interface Alert {
   title: string;
   body: string;
   substance: string;
+  /** The area it applies to (a slug in areas.json), or null when it applies everywhere. */
+  area: string | null;
+}
+
+/** A broad area people are shown results for: a metro or region, never anything finer. */
+export interface Area {
+  slug: string;
+  /** Short name, e.g. "Portland". */
+  name: string;
+  /** State, province or country, e.g. "Oregon". */
+  region: string;
+  /** Rough center, used only to suggest the nearest area. Never a sample location. */
+  lat: number;
+  lng: number;
 }
 
 export interface Reagent {
