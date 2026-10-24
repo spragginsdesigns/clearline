@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { PageTitle } from "@/components/section-title";
+import { pageMetadata } from "@/lib/site";
 import { CheckForm } from "./check-form";
 
-export const metadata: Metadata = { title: "Check a result" };
+export const metadata: Metadata = pageMetadata({
+  path: "/check",
+  title: "Check a result",
+  description: "Enter the sample ID from your receipt or test bag to see what the lab found in your sample.",
+});
 
 export default function CheckPage() {
   return (

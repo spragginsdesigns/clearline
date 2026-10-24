@@ -6,7 +6,7 @@ import alertsJson from "../../data/alerts.json";
 import reagentsJson from "../../data/reagents.json";
 import samplesJson from "../../data/samples.json";
 import substancesJson from "../../data/substances.json";
-import type { Alert, Dataset, Reagent, Sample, Substance } from "./types";
+import type { Alert, Dataset, Reagent, ReagentResult, Sample, Substance } from "./types";
 
 const dataset = samplesJson as Dataset;
 export const substances = substancesJson as Substance[];
@@ -165,6 +165,26 @@ export function soldAsMix(slug: string, months = 6): { keys: string[]; rows: Mon
   const rank = (key: string) => (key === slug ? -1e9 : key === "none" ? 1e9 : -(keyCounts.get(key) ?? 0));
   const keys = [...keyCounts.keys()].toSorted((a, b) => rank(a) - rank(b));
   return { keys, rows };
+}
+
+/**
+ * The most common result for each reagent run on samples sold as `slug`, in the lab's reagent order.
+ * Ties go to the result seen first. Reagents never run on this drug are left out.
+ */
+export function typicalReagents(slug: string, list: Sample[]): (ReagentResult & { share: number })[] {
+  const sold = list.filter((s) => s.soldAs === slug);
+  return reagents.flatMap((r) => {
+    const results = sold.flatMap((s) => s.reagents.filter((x) => x.reagent === r.slug));
+    if (results.length === 0) return [];
+    const counts = new Map<string, { result: ReagentResult; count: number }>();
+    for (const x of results) {
+      const entry = counts.get(x.result) ?? { result: x, count: 0 };
+      entry.count++;
+      counts.set(x.result, entry);
+    }
+    const top = [...counts.values()].reduce((best, e) => (e.count > best.count ? e : best));
+    return [{ ...top.result, share: top.count / results.length }];
+  });
 }
 
 export function recentSamples(count: number): Sample[] {

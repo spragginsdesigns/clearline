@@ -21,6 +21,7 @@ treats the people who use it as adults making their own decisions.
 | `/substances/[slug]` | One drug in depth: purity histogram, what else turned up, high-risk finds, month-by-month breakdown |
 | `/check` → `/results/[id]` | A person enters the ID from their sample and sees their own result |
 | `/alerts` | Every alert, newest first |
+| `/alerts/[id]` | One alert, with a 1080x1920 story card (`/alerts/[id]/story.png`) for Instagram and TikTok |
 | `/methods` | What each test can and can't detect, and how people's privacy is protected |
 | `/data` | The open dataset as JSON downloads (CC BY 4.0) |
 
@@ -32,9 +33,14 @@ Needs [Bun](https://bun.sh) 1.4 or newer.
 bun install
 bun run dev        # http://localhost:3000
 bun run seed       # regenerate the demo data in data/
+bun run icons      # rebuild the favicons from src/lib/brand.ts (needs ImageMagick 7)
 bun run lint
-bun run build      # static build; every page and result is prerendered
+bun run build      # static build; every page, result, share image and story card is prerendered
 ```
+
+Set `SITE_URL` (for example `https://clearline.example`) when the site has a domain. It's used for canonical URLs,
+the sitemap, `robots.txt`, share images and the address on story cards. On Vercel the production URL is picked up
+automatically.
 
 There is no database and no server-side secrets. The whole site is generated at build time from the JSON files in
 `data/`, so it can be hosted anywhere static files are served.
@@ -49,11 +55,12 @@ There is no database and no server-side secrets. The whole site is generated at 
 
 ```
 data/            the open dataset: samples, substances, reagents, alerts
-docs/            data dictionary and the original design mockups
-scripts/         the demo data generator
-src/app/         pages and the /data/*.json download routes
-src/components/  charts, result cards, header and footer
-src/lib/         types, data loading and aggregation, formatting
+docs/            data dictionary, the original design mockups, and the brand (docs/brand/)
+scripts/         the demo data generator, the icon builder and the Sunburst image generator
+src/app/         pages, icons, share image, story cards, sitemap and the /data/*.json download routes
+src/assets/      fonts and images used to draw the share image and story cards
+src/components/  charts, substance and result cards, empty states, header and footer
+src/lib/         types, data loading and aggregation, formatting, brand geometry, site metadata
 ```
 
 ## Privacy

@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { PageTitle } from "@/components/section-title";
 import { isDemo, latestWeek, samples } from "@/lib/data";
 import { formatWeek } from "@/lib/format";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Open data" };
+export const metadata: Metadata = pageMetadata({
+  path: "/data",
+  title: "Open data",
+  description:
+    "Download every published Clearline drug checking result as JSON under CC BY 4.0: samples, substances and alerts.",
+});
 
 const FILES = [
   { href: "/data/samples.json", name: "samples.json", what: "Every published sample result" },

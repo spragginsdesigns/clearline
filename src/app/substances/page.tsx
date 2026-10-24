@@ -4,8 +4,14 @@ import { Histogram } from "@/components/charts";
 import { PageTitle } from "@/components/section-title";
 import { pageSubstances, stats, withinDays } from "@/lib/data";
 import { percent } from "@/lib/format";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Substances" };
+export const metadata: Metadata = pageMetadata({
+  path: "/substances",
+  title: "Substances",
+  description:
+    "Median purity, what else turned up and how often something dangerous was found, for each drug people bring in for testing.",
+});
 
 export default function SubstancesPage() {
   const recent = withinDays(90);

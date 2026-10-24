@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { BarList, Histogram, StackedMonths } from "@/components/charts";
+import { EmptyState } from "@/components/empty-state";
 import { AlertBanner, Disclaimer, SampleRow } from "@/components/results";
 import { SectionTitle } from "@/components/section-title";
 import { alerts, pageSubstances, samples, soldAsMix, stats, substance, withinDays } from "@/lib/data";
 import { formatMonth, percent } from "@/lib/format";
+import { pageMetadata } from "@/lib/site";
 
 const WINDOW_DAYS = 90;
 
@@ -17,7 +19,13 @@ export function generateStaticParams() {
 export async function generateMetadata(props: PageProps<"/substances/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
   const s = pageSubstances.find((p) => p.slug === slug);
-  return s ? { title: s.name, description: `Purity, cutting agents and alerts for ${s.name} from drug checking results.` } : {};
+  return s
+    ? pageMetadata({
+        path: `/substances/${s.slug}`,
+        title: s.name,
+        description: `${s.name} drug checking results: purity, cutting agents and alerts from tested samples. ${s.summary}`,
+      })
+    : {};
 }
 
 export default async function SubstancePage(props: PageProps<"/substances/[slug]">) {
@@ -54,34 +62,40 @@ export default async function SubstancePage(props: PageProps<"/substances/[slug]
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-start">
         <Panel title="Purity distribution" note="Estimated share of each sample that is actually the drug it was sold as (FTIR).">
-          <Histogram bins={st.bins} median={st.median} color={s.color} />
-          <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
-            <Stat label="Median" value={`${st.median}%`} />
-            <Stat label="Middle half" value={`${st.q1}-${st.q3}%`} />
-            <Stat label="As expected" value={percent(st.asExpectedRate)} />
-            <Stat label="None of it" value={percent(st.absentRate)} />
-          </dl>
-          <details className="mt-4 text-sm text-ink-3">
-            <summary className="cursor-pointer hover:text-ink">Show as a table</summary>
-            <table className="mt-3 w-full tabular-nums">
-              <thead>
-                <tr className="text-left">
-                  <th className="py-1 font-medium">Purity</th>
-                  <th className="py-1 text-right font-medium">Samples</th>
-                </tr>
-              </thead>
-              <tbody>
-                {st.bins.map((n, i) => (
-                  <tr key={i} className="border-t border-line">
-                    <td className="py-1">
-                      {i * 5}-{i * 5 + 4}%
-                    </td>
-                    <td className="py-1 text-right">{n}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
+          {st.count === 0 ? (
+            <EmptyState compact title={`No ${s.name} samples in the last ${WINDOW_DAYS} days`} />
+          ) : (
+            <>
+              <Histogram bins={st.bins} median={st.median} color={s.color} />
+              <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
+                <Stat label="Median" value={`${st.median}%`} />
+                <Stat label="Middle half" value={`${st.q1}-${st.q3}%`} />
+                <Stat label="As expected" value={percent(st.asExpectedRate)} />
+                <Stat label="None of it" value={percent(st.absentRate)} />
+              </dl>
+              <details className="mt-4 text-sm text-ink-3">
+                <summary className="cursor-pointer hover:text-ink">Show as a table</summary>
+                <table className="mt-3 w-full tabular-nums">
+                  <thead>
+                    <tr className="text-left">
+                      <th className="py-1 font-medium">Purity</th>
+                      <th className="py-1 text-right font-medium">Samples</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {st.bins.map((n, i) => (
+                      <tr key={i} className="border-t border-line">
+                        <td className="py-1">
+                          {i * 5}-{i * 5 + 4}%
+                        </td>
+                        <td className="py-1 text-right">{n}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
+            </>
+          )}
         </Panel>
 
         <div className="space-y-6">
@@ -101,7 +115,7 @@ export default async function SubstancePage(props: PageProps<"/substances/[slug]
                 Test every time, start low, don&rsquo;t use alone, and carry naloxone.
               </p>
             </section>
-          ) : (
+          ) : st.count === 0 ? null : (
             <section className="rounded-2xl border border-good/30 bg-good/[0.06] p-6">
               <p className="text-sm font-semibold uppercase tracking-wider text-good">✓ No fentanyl found</p>
               <p className="mt-2 text-ink-2">
@@ -123,7 +137,7 @@ export default async function SubstancePage(props: PageProps<"/substances/[slug]
                 }))}
               />
             ) : (
-              <p className="text-sm text-ink-3">Nothing else detected.</p>
+              <EmptyState compact title="Nothing else detected" />
             )}
           </Panel>
         </div>
@@ -140,11 +154,15 @@ export default async function SubstancePage(props: PageProps<"/substances/[slug]
         </Panel>
         <div>
           <SectionTitle eyebrow="Latest" title="Recent samples" />
-          <ul className="space-y-3">
-            {latest.map((x) => (
-              <SampleRow key={x.id} sample={x} />
-            ))}
-          </ul>
+          {latest.length ? (
+            <ul className="space-y-3">
+              {latest.map((x) => (
+                <SampleRow key={x.id} sample={x} />
+              ))}
+            </ul>
+          ) : (
+            <EmptyState compact title={`No ${s.name} samples in the last ${WINDOW_DAYS} days`} />
+          )}
         </div>
       </div>
 
@@ -155,7 +173,7 @@ export default async function SubstancePage(props: PageProps<"/substances/[slug]
 
 function Panel({ title, note, children }: { title: string; note?: string; children: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-line bg-panel p-6">
+    <section className="min-w-0 rounded-2xl border border-line bg-panel p-6">
       <h2 className="text-lg font-medium">{title}</h2>
       {note && <p className="mb-5 mt-1 text-sm text-ink-3">{note}</p>}
       {children}

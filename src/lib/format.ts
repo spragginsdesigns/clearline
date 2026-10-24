@@ -12,6 +12,11 @@ export function formatWeek(week: string): string {
   })}`;
 }
 
+/** "Oct 19": the Monday of a week, for tight spaces where the label already says "week". */
+export function formatWeekShort(week: string): string {
+  return new Date(`${week}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+}
+
 export function formatMonth(month: string): string {
   return new Date(`${month}-01T00:00:00Z`).toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
 }

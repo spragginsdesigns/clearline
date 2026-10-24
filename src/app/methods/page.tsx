@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { PageTitle } from "@/components/section-title";
 import { reagents } from "@/lib/data";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = { title: "How we test" };
+export const metadata: Metadata = pageMetadata({
+  path: "/methods",
+  title: "How we test",
+  description:
+    "What reagent tests, FTIR spectroscopy and fentanyl test strips can and can't detect, and how Clearline protects the privacy of everyone who brings a sample.",
+});
 
 const METHODS = [
   {
@@ -31,10 +37,18 @@ const METHODS = [
 export default function MethodsPage() {
   return (
     <>
-      <PageTitle eyebrow="Methods" title="How we test">
-        Every sample goes through more than one test, because each method sees things the others miss. Here&rsquo;s
-        what each can and can&rsquo;t tell us.
-      </PageTitle>
+      <div className="relative">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-4 -top-4 -bottom-8 left-1/3 bg-[url(/images/methods-meniscus.webp)] bg-cover bg-[position:80%_70%] opacity-50 [mask-image:radial-gradient(ellipse_45%_60%_at_78%_50%,black_15%,transparent_68%)] sm:-right-6 sm:opacity-90"
+        />
+        <div className="relative">
+          <PageTitle eyebrow="Methods" title="How we test">
+            Every sample goes through more than one test, because each method sees things the others miss.
+            Here&rsquo;s what each can and can&rsquo;t tell us.
+          </PageTitle>
+        </div>
+      </div>
 
       <ol className="grid gap-5 lg:grid-cols-3">
         {METHODS.map((m) => (

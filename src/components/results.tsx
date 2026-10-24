@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { reagent, substance, verdict, type Verdict } from "@/lib/data";
 import { formatWeek } from "@/lib/format";
 import type { Alert, ReagentResult, Sample } from "@/lib/types";
@@ -79,11 +80,31 @@ export function SampleRow({ sample }: { sample: Sample }) {
   );
 }
 
+/** One alert in full. `heading` is the level its title sits at on the page. */
+export function AlertCard({ alert, heading = "h2", children }: { alert: Alert; heading?: "h1" | "h2"; children?: ReactNode }) {
+  const critical = alert.severity === "critical";
+  const Title = heading;
+  return (
+    <article
+      id={alert.id}
+      className={`scroll-mt-8 rounded-2xl border p-6 ${critical ? "border-critical/40 bg-critical/[0.07]" : "border-warning/40 bg-warning/[0.07]"}`}
+    >
+      <p className={`text-xs font-semibold uppercase tracking-wider ${critical ? "text-critical" : "text-warning"}`}>
+        <span aria-hidden="true">▲ </span>
+        {critical ? "Alert" : "Heads up"} · {formatWeek(alert.week)}
+      </p>
+      <Title className={`mt-2 font-display ${heading === "h1" ? "text-4xl sm:text-5xl" : "text-3xl"}`}>{alert.title}</Title>
+      <p className="mt-3 text-ink-2">{alert.body}</p>
+      {children}
+    </article>
+  );
+}
+
 export function AlertBanner({ alert }: { alert: Alert }) {
   const critical = alert.severity === "critical";
   return (
     <Link
-      href={`/alerts#${alert.id}`}
+      href={`/alerts/${alert.id}`}
       className={`flex items-start gap-3 rounded-2xl border px-4 py-3.5 transition sm:items-center ${
         critical ? "border-critical/40 bg-critical/10 hover:bg-critical/15" : "border-warning/40 bg-warning/10 hover:bg-warning/15"
       }`}

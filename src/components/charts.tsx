@@ -219,6 +219,43 @@ export function StackedMonths({
           </div>
         ))}
       </div>
+      <details className="mt-4 text-sm text-ink-3">
+        <summary className="cursor-pointer hover:text-ink">Show as a table</summary>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full whitespace-nowrap tabular-nums">
+            <thead>
+              <tr className="text-left">
+                <th scope="col" className="py-1 pr-4 font-medium">
+                  Month
+                </th>
+                {keys.map((k) => (
+                  <th key={k} scope="col" className="py-1 pl-4 text-right font-medium">
+                    {label(k)}
+                  </th>
+                ))}
+                <th scope="col" className="py-1 pl-4 text-right font-medium">
+                  Samples
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.label} className="border-t border-line">
+                  <th scope="row" className="py-1 pr-4 text-left font-normal">
+                    {row.label}
+                  </th>
+                  {keys.map((k) => (
+                    <td key={k} className="py-1 pl-4 text-right">
+                      {row.shares[k] ? percent(row.shares[k]) : "-"}
+                    </td>
+                  ))}
+                  <td className="py-1 pl-4 text-right">{row.total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </div>
   );
 }
