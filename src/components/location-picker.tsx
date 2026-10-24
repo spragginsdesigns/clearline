@@ -49,7 +49,7 @@ export function PickAreaButton({ children = "Choose your area" }: { children?: R
   );
 }
 
-/** A link that stays in the area being viewed, e.g. Substances goes to /in/portland-or/substances. */
+/** A link that stays in the area being viewed, e.g. Substances goes to /in/clovis/substances. */
 export function ScopedLink({ href, ...props }: Omit<LinkProps, "href"> & { href: string; className?: string; children: ReactNode; "aria-label"?: string }) {
   const { area } = parseScope(usePathname());
   return <Link href={scopedHref(href, area)} {...props} />;
@@ -79,7 +79,7 @@ export function LocationPicker({ areas }: { areas: Area[] }) {
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const matches = areas.filter((a) => !q || `${a.name} ${a.region}`.toLowerCase().includes(q));
+    const matches = areas.filter((a) => !q || [a.name, a.region, ...a.towns].join(" ").toLowerCase().includes(q));
     const byRegion = new Map<string, Area[]>();
     for (const a of matches) byRegion.set(a.region, [...(byRegion.get(a.region) ?? []), a]);
     return byRegion;
@@ -155,7 +155,7 @@ export function LocationPicker({ areas }: { areas: Area[] }) {
                 <h2 id="area-picker-title" className="font-display text-3xl">
                   Where are you?
                 </h2>
-                <p className="mt-1 text-sm text-ink-3">See what was tested near you, not hundreds of miles away.</p>
+                <p className="mt-1 text-sm text-ink-3">See only what was tested in your part of town.</p>
               </div>
               <button
                 type="button"
@@ -225,13 +225,19 @@ export function LocationPicker({ areas }: { areas: Area[] }) {
               <div key={region} className="mt-3">
                 <p className="px-3 pb-1 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-ink-3">{region}</p>
                 {list.map((a) => (
-                  <AreaOption key={a.slug} selected={current?.slug === a.slug} onClick={() => choose(a.slug)} name={a.name} />
+                  <AreaOption
+                    key={a.slug}
+                    selected={current?.slug === a.slug}
+                    onClick={() => choose(a.slug)}
+                    name={a.name}
+                    note={a.towns.length ? a.towns.join(", ") : undefined}
+                  />
                 ))}
               </div>
             ))}
             {groups.size === 0 && (
               <p className="px-3 py-6 text-center text-sm text-ink-3">
-                We don&rsquo;t test in &ldquo;{query}&rdquo; yet. All areas shows everything we have.
+                No area matches &ldquo;{query}&rdquo;. All areas shows everything we test.
               </p>
             )}
           </div>

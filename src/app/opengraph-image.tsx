@@ -2,8 +2,9 @@ import { ImageResponse } from "next/og";
 import { BRAND } from "@/lib/brand";
 import { isDemo, samples } from "@/lib/data";
 import { assetImage, OgLockup, ogFonts } from "@/lib/og";
+import { SERVICE_AREA } from "@/lib/site";
 
-export const alt = "Clearline: know what's really in it. Independent drug checking results.";
+export const alt = `Clearline: know what's really in it. Drug checking results for ${SERVICE_AREA}.`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -32,8 +33,8 @@ export default async function Image() {
               Know what&rsquo;s&nbsp;<span style={{ fontStyle: "italic", color: BRAND.accent }}>really</span>&nbsp;in it.
             </div>
             <div style={{ display: "flex", marginTop: 28, fontFamily: "Geist", fontSize: 30, color: BRAND.ink2, maxWidth: 820 }}>
-              Independent drug checking: purity, cuts and alerts from {samples.length.toLocaleString("en-US")} tested
-              samples.
+              Drug checking in {SERVICE_AREA}: purity, cuts and alerts from {samples.length.toLocaleString("en-US")}{" "}
+              tested samples.
             </div>
           </div>
           <div style={{ display: "flex", gap: 18, fontFamily: "Geist", fontSize: 22, color: BRAND.ink3 }}>

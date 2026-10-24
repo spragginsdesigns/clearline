@@ -60,16 +60,18 @@ export interface Alert {
   area: string | null;
 }
 
-/** A broad area people are shown results for: a metro or region, never anything finer. */
+/** A broad area people are shown results for: a city or group of towns, never anything finer. */
 export interface Area {
   slug: string;
-  /** Short name, e.g. "Portland". */
+  /** Short name, e.g. "Clovis". */
   name: string;
-  /** State, province or country, e.g. "Oregon". */
+  /** County, used to group the picker, e.g. "Fresno County". */
   region: string;
   /** Rough center, used only to suggest the nearest area. Never a sample location. */
   lat: number;
   lng: number;
+  /** Smaller towns grouped into this area, so searching "Selma" finds it. */
+  towns: string[];
 }
 
 export interface Reagent {

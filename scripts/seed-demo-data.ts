@@ -17,17 +17,14 @@ const WEEKS = 26;
 
 /**
  * Made-up local differences, so picking an area visibly changes the site: how busy each area is,
- * and multipliers on the national odds of fentanyl, xylazine and look-alike swaps.
+ * and multipliers on the baseline odds of fentanyl, xylazine and look-alike swaps.
  */
 const LOCAL: Record<string, { weekly: number; fentanyl: number; xylazine: number; swaps: number }> = {
-  "seattle-wa": { weekly: 10, fentanyl: 1.2, xylazine: 0.4, swaps: 1.6 },
-  "portland-or": { weekly: 9, fentanyl: 1.1, xylazine: 0.4, swaps: 2.2 },
-  "bay-area-ca": { weekly: 12, fentanyl: 1, xylazine: 0.5, swaps: 1.2 },
-  "los-angeles-ca": { weekly: 13, fentanyl: 0.9, xylazine: 0.3, swaps: 1 },
-  "denver-co": { weekly: 7, fentanyl: 0.8, xylazine: 0.6, swaps: 0.8 },
-  "chicago-il": { weekly: 11, fentanyl: 1.3, xylazine: 1.4, swaps: 0.7 },
-  "philadelphia-pa": { weekly: 12, fentanyl: 1.4, xylazine: 3.2, swaps: 0.6 },
-  "new-york-ny": { weekly: 14, fentanyl: 1.8, xylazine: 1.8, swaps: 0.8 },
+  fresno: { weekly: 14, fentanyl: 1.3, xylazine: 0.8, swaps: 1 },
+  clovis: { weekly: 7, fentanyl: 0.9, xylazine: 0.5, swaps: 1.8 },
+  "southeast-fresno-county": { weekly: 5, fentanyl: 1.1, xylazine: 1.6, swaps: 0.8 },
+  "west-fresno-county": { weekly: 3, fentanyl: 1, xylazine: 1.2, swaps: 0.7 },
+  madera: { weekly: 5, fentanyl: 1.2, xylazine: 1, swaps: 0.9 },
 };
 
 // Fixed seed so a rebuild never reshuffles the demo.
@@ -142,7 +139,7 @@ function weightedSoldAs(): string {
 function primary(profile: Profile, soldAs: string, swapScale: number): string | null {
   let roll = rand();
   for (const [slug, odds] of profile.swaps) {
-    // Heroin-to-fentanyl is the national supply, not a local look-alike, so it isn't scaled.
+    // Heroin-to-fentanyl is the whole supply, not a local look-alike, so it isn't scaled.
     roll -= slug === "fentanyl" ? odds : odds * swapScale;
     if (roll <= 0) return slug;
   }
@@ -221,31 +218,31 @@ for (let w = WEEKS - 1; w >= 0; w--) {
 
 const alerts: Alert[] = [
   {
-    id: "demo-2026-10-19-nyc-cocaine-fentanyl",
+    id: "demo-2026-10-19-fresno-cocaine-fentanyl",
     week: "2026-10-19",
     severity: "critical",
     title: "Fentanyl found in samples sold as cocaine",
     body: "Fentanyl turned up in samples sold as cocaine this week. People who don't use opioids have no tolerance, so even a trace can cause an overdose. Test before you use, don't use alone, and carry naloxone.",
     substance: "cocaine",
-    area: "new-york-ny",
+    area: "fresno",
   },
   {
-    id: "demo-2026-10-12-portland-mdma-cathinone",
+    id: "demo-2026-10-12-clovis-mdma-cathinone",
     week: "2026-10-12",
     severity: "warning",
     title: "Cathinones sold as MDMA",
     body: "Some samples sold as MDMA were mostly N-ethylpentylone, a synthetic cathinone. It lasts much longer than MDMA, so redosing is risky. A Marquis test that gives no reaction is a red flag.",
     substance: "mdma",
-    area: "portland-or",
+    area: "clovis",
   },
   {
-    id: "demo-2026-10-05-philadelphia-heroin-xylazine",
+    id: "demo-2026-10-05-southeast-fresno-county-heroin-xylazine",
     week: "2026-10-05",
     severity: "critical",
     title: "Xylazine in samples sold as heroin",
     body: "Xylazine keeps showing up alongside fentanyl. Naloxone still helps with the opioid part of an overdose, so always give it, then call for help. Xylazine can also cause wounds that need care.",
     substance: "heroin",
-    area: "philadelphia-pa",
+    area: "southeast-fresno-county",
   },
   {
     id: "demo-2026-09-28-heroin-fentanyl",

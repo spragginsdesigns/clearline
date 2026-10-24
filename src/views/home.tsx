@@ -20,7 +20,7 @@ import {
 } from "@/lib/data";
 import { formatMonth, formatWeekShort } from "@/lib/format";
 import { scopedHref } from "@/lib/scope";
-import { pageMetadata, SITE_DESCRIPTION } from "@/lib/site";
+import { pageMetadata, SERVICE_AREA, SITE_DESCRIPTION } from "@/lib/site";
 import type { Area } from "@/lib/types";
 
 const WINDOW_DAYS = 90;
@@ -68,7 +68,7 @@ export function HomeView({ scope }: { scope: Area | null }) {
         <div className="relative grid items-center gap-12 lg:grid-cols-[1.15fr_1fr]">
           <div>
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.25em] text-ink-3">
-              {scope ? `Drug checking in ${scope.name}, ${scope.region}` : "Independent drug checking"}
+              {scope ? `Drug checking in ${scope.name}, ${scope.region}` : `Drug checking in ${SERVICE_AREA}`}
             </p>
             <h1 className="font-display text-6xl leading-[0.95] sm:text-7xl lg:text-8xl">
               Know what&rsquo;s <em className="text-accent">really</em> in it.
@@ -181,10 +181,10 @@ function NearYou({ recentByArea }: { recentByArea: { area: Area; count: number }
       <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-start">
         <div>
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-ink-3">Results near you</p>
-          <h2 className="font-display text-3xl sm:text-4xl">The supply changes from city to city.</h2>
+          <h2 className="font-display text-3xl sm:text-4xl">The supply changes from town to town.</h2>
           <p className="mt-3 text-ink-2">
-            What&rsquo;s going around one city can be very different a few hundred miles away. Pick your area to see
-            only what was tested near you.
+            What&rsquo;s going around Fresno isn&rsquo;t always what&rsquo;s going around Clovis or Madera. Pick your
+            area to see only what was tested near you.
           </p>
           <div className="mt-5">
             <PickAreaButton />

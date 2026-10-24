@@ -11,8 +11,10 @@ export const SITE_URL = new URL(
 
 export const SITE_NAME = "Clearline";
 
-export const SITE_DESCRIPTION =
-  "Independent drug checking results: purity, cutting agents and alerts from street drug samples tested with reagents, FTIR spectroscopy and fentanyl strips.";
+/** Where the lab tests, in words. The areas themselves are in data/areas.json. */
+export const SERVICE_AREA = "Fresno, Clovis and nearby towns";
+
+export const SITE_DESCRIPTION = `Anonymous drug checking in ${SERVICE_AREA}: purity, cutting agents and alerts from street drug samples tested with reagents, FTIR spectroscopy and fentanyl strips.`;
 
 /**
  * Title, description, canonical URL and share card text for one page. Next merges `openGraph`

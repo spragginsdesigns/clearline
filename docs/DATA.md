@@ -24,7 +24,7 @@ Each **Sample**:
 |-------|------|---------|
 | `id` | string | The ID printed on the person's receipt or bag, e.g. `CL-2026-00123`. The lookup accepts `CL-` followed by 4 to 24 letters, digits or dashes. **Real IDs should be random**, not sequential, so one result can't be found by guessing its neighbours. |
 | `week` | ISO date | The Monday of the week the sample was tested. Never the exact day. |
-| `area` | area slug | The broad area the sample came from, e.g. `portland-or`. Must exist in `areas.json`. Never a venue or address. |
+| `area` | area slug | The broad area the sample came from, e.g. `clovis`. Must exist in `areas.json`. Never a venue or address. |
 | `soldAs` | substance slug | What the person was told it was. Must exist in `substances.json`. |
 | `form` | `powder` · `crystal` · `pill` · `tar` · `other` | Physical form. |
 | `found` | Component[] | Everything identified, most abundant first. Empty if nothing was identified. |
@@ -60,17 +60,20 @@ banner the `null` ones on the homepage and substance pages, so nobody gets a hea
 
 ## `areas.json`
 
-The broad areas people can pick on the site. Each one gets its own home, substances and alerts pages under
+The broad areas people can pick on the site. The lab tests in Fresno, Clovis and nearby towns, so these are a city
+or a group of nearby towns each. To cover a new place, add it here (and keep `SERVICE_AREA` in `src/lib/site.ts`, the
+plain-words version used in page descriptions, in step). Each one gets its own home, substances and alerts pages under
 `/in/<slug>/`.
 
 | Field | Meaning |
 |-------|---------|
-| `slug` | ID used in `samples.json`, `alerts.json` and URLs, e.g. `portland-or`. |
-| `name` | Display name, e.g. `Portland`. |
-| `region` | State or province, used to group the picker list. |
+| `slug` | ID used in `samples.json`, `alerts.json` and URLs, e.g. `clovis`. |
+| `name` | Display name, e.g. `Clovis` or `Southeast Fresno County`. |
+| `region` | County, used to group the picker list. |
+| `towns` | Smaller towns grouped into the area (`["Sanger", "Reedley", "Selma"]`). Shown under the area in the picker and matched by its search, so people find their town. Empty for a single city. |
 | `lat`, `lng` | A rough center point, two decimals at most. Only used in the browser to find the area nearest the person; their own position never leaves their device. |
 
-"Use my location" picks the nearest area within 120 miles (`NEARBY_MILES` in `src/lib/scope.ts`). Further than that,
+"Use my location" picks the nearest area within 40 miles (`NEARBY_MILES` in `src/lib/scope.ts`). Further than that,
 the site says plainly that the lab doesn't test near them yet and offers the closest area or all areas.
 
 ## `reagents.json`
@@ -95,8 +98,8 @@ All in `src/lib/data.ts`:
 Real exports must follow these, because everything here is public:
 
 1. No names, contact details, payment details or anything else that identifies the person who brought the sample.
-2. No seller, venue or address. `area` is a metro area or region only, never a neighbourhood that could single out a
-   site.
+2. No seller, venue or address. `area` is a city or a group of towns only, never a neighbourhood that could single
+   out a site.
 3. `week`, never an exact date or time.
 4. Random, unguessable sample IDs.
 5. If an area has so few samples in a week that a result could point to one person, merge it into a larger area.

@@ -27,25 +27,28 @@
 - While the site runs on demo data it stays out of search engines entirely: `robots.txt` disallows everything, every
   page has a `noindex, nofollow` meta tag, and every response (images and JSON too) sends `X-Robots-Tag: noindex,
   nofollow`. All three switch off on their own when `data/samples.json` has `"demo": false`.
-- Results by area. A location pill in the header opens a picker: "Use my location" finds the nearest area (on the
-  device; the position is never sent anywhere), or people search and pick from a list grouped by state, or choose All
-  areas. Every number, chart, recent sample and alert then reflects only that area, at `/in/<area>/...` URLs that can
+- Results by area, for the places we actually test: Fresno, Clovis, Southeast Fresno County (Sanger, Reedley, Selma
+  and nearby), West Fresno County (Kerman, Mendota and nearby) and Madera. A location pill in the header opens a
+  picker: "Use my location" finds the nearest area (on the device; the position is never sent anywhere), or people
+  search by city or town and pick from a list grouped by county, or choose All areas. Every number, chart, recent sample and alert then reflects only that area, at `/in/<area>/...` URLs that can
   be shared. The choice is remembered on the device, so the next visit opens on their area.
-- If the nearest area is more than 120 miles away, the picker says plainly that we don't test near them yet and
-  offers the closest area or all areas, instead of quietly showing a far-away city as if it were local.
+- If the nearest area is more than 40 miles away, the picker says plainly that we don't test near them yet and
+  offers the closest area or all areas, instead of quietly showing a far-away town as if it were local.
+- Page descriptions, the share image and the homepage say where we test ("Fresno, Clovis and nearby towns"), for
+  local search.
 - The all-areas homepage has a "Results near you" panel with every area and its recent sample count. It only
   banners alerts that apply everywhere; area alerts show on that area's pages, and every alert is tagged with its area.
-- Results and recent samples show the area name ("Portland") instead of an internal code. Story cards show the
+- Results and recent samples show the area name ("Clovis") instead of an internal code. Story cards show the
   alert's area next to the week.
 - Substance pages say so when an area has only a few samples, since small numbers swing a lot.
 
 ### Dev notes
 
-- Next.js 16.4 App Router with Cache Components, Bun 1.4, Tailwind CSS 4. All pages, including about 2,300 result pages
+- Next.js 16.4 App Router with Cache Components, Bun 1.4, Tailwind CSS 4. All pages, including about 860 result pages
   and the per-area pages under `/in/[area]`, are prerendered at build time from `data/*.json`.
 - Page bodies live in `src/views/` and take a `scope` (an area, or `null` for all areas), so `/substances` and
   `/in/<area>/substances` share one component. `src/lib/scope.ts` holds the client-safe URL and distance helpers.
-- The demo seed now makes eight metro areas with made-up local differences (how busy each is, and how often fentanyl,
+- The demo seed now spreads samples across the five Fresno-area areas with made-up local differences (how busy each is, and how often fentanyl,
   xylazine and look-alike drugs turn up), so switching areas visibly changes the site.
 - Charts are server-rendered SVG with native tooltips and table views. Colors come from the dataviz reference dark
   palette, validated for color-blind separation against the `#121620` panel.

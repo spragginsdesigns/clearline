@@ -1,10 +1,28 @@
 [
-  { "slug": "seattle-wa", "name": "Seattle", "region": "Washington", "lat": 47.61, "lng": -122.33 },
-  { "slug": "portland-or", "name": "Portland", "region": "Oregon", "lat": 45.52, "lng": -122.68 },
-  { "slug": "bay-area-ca", "name": "Bay Area", "region": "California", "lat": 37.77, "lng": -122.27 },
-  { "slug": "los-angeles-ca", "name": "Los Angeles", "region": "California", "lat": 34.05, "lng": -118.24 },
-  { "slug": "denver-co", "name": "Denver", "region": "Colorado", "lat": 39.74, "lng": -104.99 },
-  { "slug": "chicago-il", "name": "Chicago", "region": "Illinois", "lat": 41.88, "lng": -87.63 },
-  { "slug": "philadelphia-pa", "name": "Philadelphia", "region": "Pennsylvania", "lat": 39.95, "lng": -75.17 },
-  { "slug": "new-york-ny", "name": "New York City", "region": "New York", "lat": 40.71, "lng": -74.01 }
+  { "slug": "fresno", "name": "Fresno", "region": "Fresno County", "lat": 36.74, "lng": -119.79, "towns": [] },
+  { "slug": "clovis", "name": "Clovis", "region": "Fresno County", "lat": 36.83, "lng": -119.7, "towns": [] },
+  {
+    "slug": "southeast-fresno-county",
+    "name": "Southeast Fresno County",
+    "region": "Fresno County",
+    "lat": 36.62,
+    "lng": -119.5,
+    "towns": ["Sanger", "Reedley", "Selma", "Kingsburg", "Fowler", "Parlier", "Orange Cove"]
+  },
+  {
+    "slug": "west-fresno-county",
+    "name": "West Fresno County",
+    "region": "Fresno County",
+    "lat": 36.7,
+    "lng": -120.2,
+    "towns": ["Kerman", "Mendota", "Firebaugh", "San Joaquin", "Coalinga"]
+  },
+  {
+    "slug": "madera",
+    "name": "Madera",
+    "region": "Madera County",
+    "lat": 36.96,
+    "lng": -120.06,
+    "towns": ["Chowchilla", "Madera Ranchos"]
+  }
 ]

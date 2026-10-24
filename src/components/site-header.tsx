@@ -30,7 +30,7 @@ export function SiteHeader() {
       </nav>
       <div className="order-3 w-full sm:order-none sm:ml-auto sm:w-auto lg:ml-0">
         {/* Only what the picker needs, so the sample data stays out of the client bundle. */}
-        <LocationPicker areas={areas.map(({ slug, name, region, lat, lng }) => ({ slug, name, region, lat, lng }))} />
+        <LocationPicker areas={areas.map(({ slug, name, region, lat, lng, towns }) => ({ slug, name, region, lat, lng, towns }))} />
       </div>
       <Link
         href="/check"

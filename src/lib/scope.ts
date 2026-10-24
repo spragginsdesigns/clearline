@@ -15,7 +15,7 @@ export function scopedHref(path: string, area: string | null): string {
   return base === "/" ? `/in/${area}` : `/in/${area}${base}`;
 }
 
-/** Splits "/in/portland-or/substances" into its area and the all-areas path. */
+/** Splits "/in/clovis/substances" into its area and the all-areas path. */
 export function parseScope(path: string): { area: string | null; base: string } {
   const match = path.match(/^\/in\/([a-z0-9-]+)(\/.*)?$/);
   if (!match) return { area: null, base: path };
@@ -46,7 +46,10 @@ export function nearest<T extends AreaPoint>(areas: T[], from: { lat: number; ln
   return best;
 }
 
-/** Further than this, we tell people we don't test near them yet instead of quietly picking an area. */
-export const NEARBY_MILES = 120;
+/**
+ * Further than this, we tell people we don't test near them yet instead of quietly picking an area.
+ * The areas are towns around Fresno, so anyone beyond a short drive of the nearest one is outside them.
+ */
+export const NEARBY_MILES = 40;
 
 export const STORAGE_KEY = "clearline.area";
