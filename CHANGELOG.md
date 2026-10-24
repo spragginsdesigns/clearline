@@ -24,6 +24,9 @@
 - The "sold as vs. actually found" chart has a "Show as a table" view.
 - Every page has its own title, description, canonical URL and share card text. There is a `sitemap.xml` (result
   pages left out on purpose) and a `robots.txt` that keeps crawlers away from `/results/`.
+- While the site runs on demo data it stays out of search engines entirely: `robots.txt` disallows everything, every
+  page has a `noindex, nofollow` meta tag, and every response (images and JSON too) sends `X-Robots-Tag: noindex,
+  nofollow`. All three switch off on their own when `data/samples.json` has `"demo": false`.
 
 ### Dev notes
 

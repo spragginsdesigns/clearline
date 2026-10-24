@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { DemoBanner } from "@/components/demo-banner";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { isDemo } from "@/lib/data";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -33,6 +34,8 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US" },
   twitter: { card: "summary_large_image" },
+  // Demo data must never show up in search results (robots.ts and next.config.ts do the same).
+  ...(isDemo && { robots: { index: false, follow: false } }),
 };
 
 export const viewport: Viewport = {
