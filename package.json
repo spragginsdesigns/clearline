@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "bun scripts/seed-demo-data.ts",
+    "icons": "bun scripts/build-icons.ts",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {

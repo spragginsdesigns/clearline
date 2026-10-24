@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-ink-3 sm:grid-cols-[2fr_1fr] sm:px-6">
         <div className="space-y-3">
           <p className="text-ink-2">
-            <span className="tracking-[0.2em] text-ink">CLEARLINE</span> is an independent drug checking service. We
+            <span className="font-medium text-ink">Clearline</span> is an independent drug checking service. We
             publish what we find so people can make safer choices, without judgment.
           </p>
           <p>

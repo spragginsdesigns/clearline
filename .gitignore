@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sunburst takes (kept ones are copied into the repo by hand)
+/.sunburst/

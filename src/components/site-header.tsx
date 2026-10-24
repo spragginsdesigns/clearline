@@ -13,7 +13,7 @@ export function SiteHeader() {
     <header className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-4 py-5 sm:px-6">
       <Link href="/" className="flex items-center gap-2.5" aria-label="Clearline home">
         <Logo />
-        <span className="text-lg font-medium tracking-[0.2em]">CLEARLINE</span>
+        <span className="text-xl font-medium tracking-tight">Clearline</span>
       </Link>
       <nav aria-label="Main" className="order-3 -mx-2 flex w-full justify-between overflow-x-auto text-sm [scrollbar-width:none] sm:order-none sm:mx-0 sm:w-auto sm:justify-start sm:gap-1">
         {NAV.map((item) => (
