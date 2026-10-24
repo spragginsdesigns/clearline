@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
+/* Dark only, by design: there is no light theme and no toggle. Chart colors are
+   the dataviz reference dark steps, validated for color-blind separation and 3:1
+   contrast against --color-panel (#121620). */
+@theme {
+  --color-page: #0a0c11;
+  --color-panel: #121620;
+  --color-panel-raised: #181d29;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-ink: #f0efec;
+  --color-ink-2: #c3c2b7;
+  --color-ink-3: #8f8e88;
+  --color-accent: #a99dff;
+  --color-accent-ink: #0a0c11;
+  --color-good: #0ca30c;
+  --color-warning: #fab219;
+  --color-critical: #e66767;
+  --color-grid: #2c2c2a;
+  --color-axis: #383835;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-page);
+  color: var(--color-ink);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }

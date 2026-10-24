@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clearline
 
-## Getting Started
+**Know what's really in it.** Clearline is an open-source website for a drug checking service. It publishes the
+results of street drug samples tested with reagent kits, FTIR spectroscopy and fentanyl test strips: how pure each drug
+is, what it's cut with, and when something dangerous shows up.
 
-First, run the development server:
+It is built for harm reduction. The site is calm, non-judgmental and plain-spoken, works well on cheap phones, and
+treats the people who use it as adults making their own decisions.
+
+> **The data in this repo is generated demo data.** Every number on the site comes from `data/samples.json`, which
+> `bun run seed` fills with plausible but fake results. The site shows a "Demo data" banner on every page until that
+> file is replaced with real lab results (see [docs/DATA.md](docs/DATA.md)).
+
+![Mockups](docs/mockups/1-editorial-lab.png)
+
+## What's on the site
+
+| Page | What it shows |
+|------|---------------|
+| `/` | The latest alert, median purity for every drug, a "sold as vs. actually found" chart and the newest samples |
+| `/substances/[slug]` | One drug in depth: purity histogram, what else turned up, high-risk finds, month-by-month breakdown |
+| `/check` → `/results/[id]` | A person enters the ID from their sample and sees their own result |
+| `/alerts` | Every alert, newest first |
+| `/methods` | What each test can and can't detect, and how people's privacy is protected |
+| `/data` | The open dataset as JSON downloads (CC BY 4.0) |
+
+## Running it
+
+Needs [Bun](https://bun.sh) 1.4 or newer.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev        # http://localhost:3000
+bun run seed       # regenerate the demo data in data/
+bun run lint
+bun run build      # static build; every page and result is prerendered
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+There is no database and no server-side secrets. The whole site is generated at build time from the JSON files in
+`data/`, so it can be hosted anywhere static files are served.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it's built
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 16** (App Router, Cache Components) on **Bun**, with **Tailwind CSS 4** and TypeScript.
+- **Dark mode only**, on purpose: one theme, no toggle. Colors live in `src/app/globals.css`.
+- **Charts are hand-written SVG** in `src/components/charts.tsx`. No chart library, no client JavaScript, readable
+  without scripts. Chart colors were checked for color-blind separation and contrast against the dark background.
+- **Every number is computed** in `src/lib/data.ts` from the raw samples. Pages never hard-code a figure.
 
-## Learn More
+```
+data/            the open dataset: samples, substances, reagents, alerts
+docs/            data dictionary and the original design mockups
+scripts/         the demo data generator
+src/app/         pages and the /data/*.json download routes
+src/components/  charts, result cards, header and footer
+src/lib/         types, data loading and aggregation, formatting
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Privacy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Published results never include names, contact details, exact dates, venues or sellers. Each sample has a week and a
+broad area, nothing finer. Sample IDs are the only link between a person and their result, and result pages are kept
+out of search engines. See [docs/DATA.md](docs/DATA.md#privacy-rules) for the rules any real data must follow.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Issues and pull requests are welcome, especially from people who work in harm reduction or drug checking. See
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Code:** [MIT](LICENSE).
+- **Data** (everything in `data/`): [CC BY 4.0](DATA-LICENSE.md). Reuse it freely, with credit to Clearline.
+
+Nothing on this site is medical advice. Drug checking reduces risk; it can't remove it.

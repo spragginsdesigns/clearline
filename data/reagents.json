@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "marquis",
+    "name": "Marquis",
+    "description": "The first test for most samples. Reacts with MDMA, opioids and amphetamines; cocaine gives no reaction."
+  },
+  {
+    "slug": "mecke",
+    "name": "Mecke",
+    "description": "Helps tell opioids and MDMA-family drugs apart."
+  },
+  {
+    "slug": "mandelin",
+    "name": "Mandelin",
+    "description": "Useful for ketamine, which gives no reaction on Marquis."
+  },
+  {
+    "slug": "simons",
+    "name": "Simon's",
+    "description": "Detects secondary amines, which separates MDMA from MDA and methamphetamine from amphetamine."
+  }
+]

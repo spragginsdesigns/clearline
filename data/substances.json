@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "cocaine",
+    "name": "Cocaine",
+    "kind": "active",
+    "color": "#3987e5",
+    "highRisk": false,
+    "hasPage": true,
+    "summary": "A stimulant usually sold as a white powder. It is commonly cut with other drugs and fillers, and fentanyl contamination happens."
+  },
+  {
+    "slug": "mdma",
+    "name": "MDMA",
+    "kind": "active",
+    "color": "#9085e9",
+    "highRisk": false,
+    "hasPage": true,
+    "summary": "Sold as crystals, powder or pressed pills. Pills and powders are sometimes something else entirely, such as cathinones or MDA."
+  },
+  {
+    "slug": "ketamine",
+    "name": "Ketamine",
+    "kind": "active",
+    "color": "#199e70",
+    "highRisk": false,
+    "hasPage": true,
+    "summary": "A dissociative sold as powder or crystal. Look-alike analogues turn up from time to time."
+  },
+  {
+    "slug": "heroin",
+    "name": "Heroin",
+    "kind": "active",
+    "color": "#c98500",
+    "highRisk": true,
+    "hasPage": true,
+    "summary": "An opioid. Much of what is sold as heroin now contains fentanyl, and some contains xylazine, which naloxone does not reverse."
+  },
+  {
+    "slug": "methamphetamine",
+    "name": "Methamphetamine",
+    "kind": "active",
+    "color": "#d55181",
+    "highRisk": false,
+    "hasPage": true,
+    "summary": "A stimulant sold as crystal or powder. Usually high purity, sometimes cut with inactive fillers."
+  },
+  {
+    "slug": "mda",
+    "name": "MDA",
+    "kind": "active",
+    "color": "#199e70",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A close relative of MDMA that lasts longer and feels more stimulating. Often sold as MDMA."
+  },
+  {
+    "slug": "n-ethylpentylone",
+    "name": "N-ethylpentylone",
+    "kind": "active",
+    "color": "#d95926",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A synthetic cathinone (\"bath salt\") often sold as MDMA. Long-lasting, can cause insomnia, paranoia and overheating."
+  },
+  {
+    "slug": "deschloroketamine",
+    "name": "Deschloroketamine",
+    "kind": "active",
+    "color": "#d95926",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A ketamine analogue that is stronger and lasts longer than ketamine."
+  },
+  {
+    "slug": "fentanyl",
+    "name": "Fentanyl",
+    "kind": "adulterant",
+    "color": "#e66767",
+    "highRisk": true,
+    "hasPage": false,
+    "summary": "A very strong synthetic opioid. Tiny amounts can cause an overdose, especially for people without opioid tolerance."
+  },
+  {
+    "slug": "xylazine",
+    "name": "Xylazine",
+    "kind": "adulterant",
+    "color": "#d55181",
+    "highRisk": true,
+    "hasPage": false,
+    "summary": "A veterinary sedative found mixed with opioids. Naloxone does not reverse it, and it can cause serious wounds."
+  },
+  {
+    "slug": "levamisole",
+    "name": "Levamisole",
+    "kind": "adulterant",
+    "color": "#199e70",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A veterinary dewormer common in cocaine. Linked to a dangerous drop in white blood cells and skin damage."
+  },
+  {
+    "slug": "phenacetin",
+    "name": "Phenacetin",
+    "kind": "adulterant",
+    "color": "#c98500",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A painkiller taken off the market for kidney damage and cancer risk. Common in cocaine."
+  },
+  {
+    "slug": "lidocaine",
+    "name": "Lidocaine",
+    "kind": "adulterant",
+    "color": "#d55181",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A local anesthetic that mimics cocaine's numbing."
+  },
+  {
+    "slug": "benzocaine",
+    "name": "Benzocaine",
+    "kind": "adulterant",
+    "color": "#9085e9",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A local anesthetic that mimics cocaine's numbing."
+  },
+  {
+    "slug": "caffeine",
+    "name": "Caffeine",
+    "kind": "adulterant",
+    "color": "#c98500",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "A common, cheap stimulant cut."
+  },
+  {
+    "slug": "dimethyl-sulfone",
+    "name": "Dimethyl sulfone",
+    "kind": "inactive",
+    "color": "#898781",
+    "highRisk": false,
+    "hasPage": false,
+    "summary": "An inactive crystalline filler (MSM)."
+  }
+]

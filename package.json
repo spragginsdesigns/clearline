@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "bun scripts/seed-demo-data.ts",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "next": "16.4.3",
@@ -31,5 +33,11 @@
   "trustedDependencies": [
     "sharp",
     "unrs-resolver"
-  ]
+  ],
+  "description": "Open-source drug checking results site: purity, cutting agents and alerts from street drug samples.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spragginsdesigns/clearline.git"
+  }
 }
